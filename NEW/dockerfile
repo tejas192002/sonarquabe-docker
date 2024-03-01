@@ -1,14 +1,14 @@
 FROM sonarqube:7.9.1-community
 
 # Install Java JDK 11
-RUN mkdir -p /usr/lib/jvm && \
-    cd /usr/lib/jvm && \
+RUN mkdir -p /home/user/jvm && \
+    cd /home/user/jvm && \
     wget https://download.bell-sw.com/java/11.0.12+8/bellsoft-jdk11.0.12+8-linux-amd64.tar.gz && \
     tar -zxvf bellsoft-jdk11.0.12+8-linux-amd64.tar.gz && \
     rm bellsoft-jdk11.0.12+8-linux-amd64.tar.gz
 
 # Set JAVA_HOME environment variable
-ENV JAVA_HOME /usr/lib/jvm/bellsoft-jdk11.0.12+8-linux-amd64
+ENV JAVA_HOME /home/user/jvm/bellsoft-jdk11.0.12+8-linux-amd64
 ENV PATH $JAVA_HOME/bin:$PATH
 
 # Download MySQL JDBC Connector JAR
