@@ -1,13 +1,13 @@
 FROM centos
-RUN rpm -ivh http://repo.mysql.com/mysql57-community-release-el7.rpm 
-RUN rpm --import https://repo.mysql.com/RPM-GPG-KEY-mysql-2022
-RUN wget https://download.bell-sw.com/java/11.0.4/bellsoft-jdk11.0.4-linux-amd64.rpm
-RUN rpm -ivh bellsoft-jdk11.0.4-linux-amd64.rpm
-RUN echo 'vm.max_map_count=262144' >/etc/sysctl.conf
-RUN sysctl -p
-RUN echo '* - nofile 80000' >>/etc/security/limits.conf
-RUN sed -i -e '/query_cache_size/ d' -e '$ a query_cache_size = 15M' /etc/my.cnf
-RUN yum install unzip -y
+
+# Install MySQL repository and JDK
+RUN rpm -ivh http://repo.mysql.com/mysql57-community-release-el7.rpm && \
+    rpm --import https://repo.mysql.com/RPM-GPG-KEY-mysql-2022 && \
+    yum install -y wget && \
+    wget https://download.bell-sw.com/java/11.0.4/bellsoft-jdk11.0.4-linux-amd64.rpm && \
+    rpm -ivh bellsoft-jdk11.0.4-linux-amd64.rpm && \
+    rm bellsoft-jdk11.0.4-linux-amd64.rpm && \
+    yum install -y unzip
 RUN wget https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-7.9.1.zip /opt/
 WORKDIR /opt/
 RUN unzip ~/sonarqube-7.9.1.zip
