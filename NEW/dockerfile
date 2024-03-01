@@ -22,11 +22,5 @@ RUN sed -i '/^#sonar.jdbc.username/ s/^#//' /opt/sonarqube/conf/sonar.properties
     sed -i 's/^sonar.jdbc.password=.*/sonar.jdbc.password=Redhat@123/' /opt/sonarqube/conf/sonar.properties && \
     sed -i 's/^sonar.jdbc.url=.*/sonar.jdbc.url=jdbc:mysql:\/\/mysql:3306\/sonarqube?useUnicode=true&characterEncoding=utf8&rewriteBatchedStatements=true&useConfigs=maxPerformance/' /opt/sonarqube/conf/sonar.properties
 
-# Copy custom startup script
-COPY start-sonarqube.sh /opt/sonarqube/bin/start-sonarqube.sh
-
-# Grant execute permissions to the script
-RUN chmod +x /opt/sonarqube/bin/start-sonarqube.sh
-
-# Set the entrypoint to the custom startup script
-ENTRYPOINT ["/opt/sonarqube/bin/start-sonarqube.sh"]
+# Start SonarQube
+CMD ["./bin/run.sh"]
