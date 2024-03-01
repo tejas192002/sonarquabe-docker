@@ -11,8 +11,11 @@ RUN mkdir -p /usr/lib/jvm && \
 ENV JAVA_HOME /usr/lib/jvm/bellsoft-jdk11.0.12+8-linux-amd64
 ENV PATH $JAVA_HOME/bin:$PATH
 
-# Copy MySQL connector JAR from the local directory into the container
-COPY mysql-connector-java-8.0.28.jar /opt/sonarqube/extensions/plugins/
+# Download MySQL JDBC Connector JAR
+RUN wget https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-8.0.28.tar.gz && \
+    tar -zxvf mysql-connector-java-8.0.28.tar.gz && \
+    cp mysql-connector-java-8.0.28/mysql-connector-java-8.0.28.jar /opt/sonarqube/extensions/plugins/ && \
+    rm -rf mysql-connector-java-8.0.28 mysql-connector-java-8.0.28.tar.gz
 
 # Set up SonarQube properties to connect to MySQL
 RUN sed -i '/^#sonar.jdbc.username/ s/^#//' /opt/sonarqube/conf/sonar.properties && \
