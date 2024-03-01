@@ -1,3 +1,28 @@
+version: '3.7'
+
+services:
+  sonarqube:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "9000:9000"
+    environment:
+      SONARQUBE_JDBC_USERNAME: sonarqube
+      SONARQUBE_JDBC_PASSWORD: Redhat@123
+      SONARQUBE_JDBC_URL: jdbc:mysql://mysql:3306/sonarqube?useUnicode=true&characterEncoding=utf8&rewriteBatchedStatements=true&useConfigs=maxPerformance
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql:5.7
+    environment:
+      MYSQL_DATABASE: sonarqube
+      MYSQL_USER: sonarqube
+      MYSQL_PASSWORD: Redhat@123
+      MYSQL_ROOT_PASSWORD: rootpassword
+
+# Dockerfile content starts here
 FROM sonarqube:7.9.1-community
 
 # Install Java JDK 11
@@ -21,12 +46,3 @@ RUN sed -i '/^#sonar.jdbc.username/ s/^#//' /opt/sonarqube/conf/sonar.properties
     sed -i 's/^sonar.jdbc.username=.*/sonar.jdbc.username=sonarqube/' /opt/sonarqube/conf/sonar.properties && \
     sed -i 's/^sonar.jdbc.password=.*/sonar.jdbc.password=Redhat@123/' /opt/sonarqube/conf/sonar.properties && \
     sed -i 's/^sonar.jdbc.url=.*/sonar.jdbc.url=jdbc:mysql:\/\/mysql:3306\/sonarqube?useUnicode=true&characterEncoding=utf8&rewriteBatchedStatements=true&useConfigs=maxPerformance/' /opt/sonarqube/conf/sonar.properties
-
-# Copy custom startup script
-COPY start-sonarqube.sh /opt/sonarqube/bin/start-sonarqube.sh
-
-# Grant execute permissions to the script
-RUN chmod +x /opt/sonarqube/bin/start-sonarqube.sh
-
-# Set the entrypoint to the custom startup script
-ENTRYPOINT ["/opt/sonarqube/bin/start-sonarqube.sh"]
