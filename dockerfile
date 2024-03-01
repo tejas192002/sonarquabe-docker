@@ -1,7 +1,6 @@
 FROM centos
 RUN rpm -ivh http://repo.mysql.com/mysql57-community-release-el7.rpm 
 RUN rpm --import https://repo.mysql.com/RPM-GPG-KEY-mysql-2022
-RUN yum install epel-release -y
 RUN wget https://download.bell-sw.com/java/11.0.4/bellsoft-jdk11.0.4-linux-amd64.rpm
 RUN rpm -ivh bellsoft-jdk11.0.4-linux-amd64.rpm
 RUN echo 'vm.max_map_count=262144' >/etc/sysctl.conf
